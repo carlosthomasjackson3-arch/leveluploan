@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LevelUp Loan</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e5e7eb;
+      --dark:#0f172a;
+      --soft-blue:#eef4ff;
+      --soft-green:#f1fbf4;
+      --soft-amber:#fff9eb;
+      --soft-rose:#fff3f4;
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#dc2626;
+      --shadow:0 12px 30px rgba(15,23,42,.08);
+      --radius:26px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:linear-gradient(180deg,#f8fafc 0%, #f3f6fb 100%); color:var(--text); }
+    body { min-height:100vh; }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 14px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: -.02em;
+    }
+
+    .nav {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .nav button {
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .nav button.active {
+      background:var(--dark);
+      color:#fff;
+      border-color:var(--dark);
+    }
+
+    .page { display:none; }
+    .page.active { display:block; }
+
+    .hero {
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+
+    .soft-blue { background:linear-gradient(180deg,var(--soft-blue),#fff); }
+    .soft-green { background:linear-gradient(180deg,var(--soft-green),#fff); }
+    .soft-amber { background:linear-gradient(180deg,var(--soft-amber),#fff); }
+    .soft-rose { background:linear-gradient(180deg,var(--soft-rose),#fff); }
+
+    h1, h2, h3, p { margin-top:0; }
+    .hero h1 {
+      font-size: 54px;
+      line-height: 1;
+      letter-spacing: -.04em;
+      margin-bottom: 14px;
+    }
+
+    .lead {
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.55;
+    }
+
+    .section-title {
+      font-size:32px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+      margin-bottom:8px;
+      font-weight:900;
+    }
+
+    .subtle {
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .cta-row,
+    .button-row {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .btn, .btn-outline, .btn-ghost {
+      border:none;
+      border-radius:18px;
+      padding:14px 18px;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .btn {
+      background:var(--dark);
+      color:#fff;
+    }
+
+    .btn-outline {
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    .btn-ghost {
+      background:#f8fafc;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    .stat-grid {
+      display:grid;
+      grid-template-columns: repeat(3,1fr);
+      gap:12px;
+    }
+
+    .mini {
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+    }
+
+    .mini-label {
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .mini-value {
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .level-path {
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .path-item {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:18px;
+      padding:14px 16px;
+      font-weight:700;
+    }
+
+    .grid-3 {
+      display:grid;
+      grid-template-columns: repeat(3,1fr);
+      gap:14px;
+    }
+
+    .feature {
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+
+    .feature h3 {
+      font-size:20px;
+      margin-bottom:8px;
+    }
+
+    .form-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .progress-wrap {
+      margin-bottom: 16px;
+    }
+
+    .progress-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .progress-head strong {
+      font-size:18px;
+    }
+
+    .progress {
+      height: 10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress > div {
+      height:100%;
+      background:var(--dark);
+      width:20%;
+      transition: width .25s ease;
+    }
+
+    .score-panel {
+      display:flex;
+      gap:18px;
+      align-items:center;
+      margin-top:16px;
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:22px;
+      background:#fff;
+    }
+
+    .score-ring {
+      width:110px;
+      height:110px;
+      border-radius:999px;
+      border:12px solid #e5e7eb;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#fff;
+      flex-shrink:0;
+    }
+
+    .score-ring span {
+      font-size:34px;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .score-low { color:var(--bad); }
+    .score-mid { color:var(--warn); }
+    .score-high { color:var(--good); }
+
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .stack { display:grid; gap:12px; }
+    .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+    .field-label {
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+      font-weight:700;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    textarea,
+    select {
+      width:100%;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:18px;
+      padding:14px 16px;
+      font:inherit;
+      color:var(--text);
+    }
+
+    textarea {
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .notice,
+    .warning,
+    .success {
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .notice {
+      background:#eef4ff;
+      border:1px solid #bfdbfe;
+      color:#1e3a8a;
+    }
+
+    .warning {
+      background:#fff8e8;
+      border:1px solid #fcd34d;
+      color:#92400e;
+    }
+
+    .success {
+      background:#eefcf2;
+      border:1px solid #86efac;
+      color:#166534;
+    }
+
+    .question-card {
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .option-btn {
+      width:100%;
+      text-align:left;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .option-btn.selected {
+      border-color: var(--dark);
+      background:#f8fafc;
+    }
+
+    .option-btn:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+
+    .tabs {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .tab-btn {
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .tab-btn.active {
+      background:var(--dark);
+      color:#fff;
+      border-color:var(--dark);
+    }
+
+    .agreement-box {
+      max-height:300px;
+      overflow:auto;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      line-height:1.55;
+    }
+
+    .agreement-pane { display:none; }
+    .agreement-pane.active { display:block; }
+
+    .checkbox-row {
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin-top:4px;
+    }
+
+    .checkbox-row input {
+      width:24px;
+      height:24px;
+      margin-top:2px;
+    }
+
+    .final-card {
+      max-width:760px;
+      margin:0 auto;
+    }
+
+    .form-link {
+      display:block;
+      width:100%;
+      text-align:center;
+      background:var(--dark);
+      color:#fff;
+      border-radius:20px;
+      padding:16px;
+      font-weight:900;
+      margin-top:14px;
+    }
+
+    .tiny {
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .admin-layout {
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:18px;
+    }
+
+    .status {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .status.good { background:#eefcf2; color:#166534; border-color:#86efac; }
+    .status.warn { background:#fff8e8; color:#92400e; border-color:#fcd34d; }
+    .status.bad { background:#fff1f2; color:#991b1b; border-color:#fda4af; }
+
+    .queue {
+      display:grid;
+      gap:12px;
+    }
+
+    .queue-item {
+      border:1px solid var(--border);
+      border-radius:22px;
+      background:#fff;
+      padding:16px;
+    }
+
+    .queue-top {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .risk-bar {
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 12px;
+    }
+
+    .risk-bar > div {
+      height:100%;
+      background:var(--dark);
+    }
+
+    .repay-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .payment-box {
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:22px;
+      padding:16px;
+    }
+
+    .footer {
+      padding:32px 0 8px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .grid-3,
+      .stat-grid,
+      .admin-layout,
+      .repay-grid,
+      .row-2 { grid-template-columns:1fr; }
+      .hero h1 { font-size:40px; }
+      .score-panel { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">LevelUp Loan</div>
+      <div class="nav">
+        <button class="active" onclick="showPage('home', this)">Home</button>
+        <button onclick="showPage('how', this)">How It Works</button>
+        <button onclick="showPage('apply', this)">Apply</button>
+        <button onclick="showPage('training', this)">Training</button>
+        <button onclick="showPage('agreement', this)">Agreement</button>
+        <button onclick="showPage('review', this)">Review</button>
+        <button onclick="showPage('admin', this)">Admin</button>
+        <button onclick="showPage('repay', this)">Repay</button>
+      </div>
+    </div>
+
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="card">
+          <h1>Build your score.<br />Unlock stronger approvals.</h1>
+          <p class="lead">
+            LevelUp Loan is built to make borrowers slow down, think, learn, and submit stronger applications.
+            It is structured, serious, and designed to reward better effort.
+          </p>
+          <div class="cta-row">
+            <button class="btn" onclick="jumpTo('apply')">Start LevelUp</button>
+            <button class="btn-outline" onclick="jumpTo('how')">See how it works</button>
+          </div>
+        </div>
+
+        <div class="card soft-blue">
+          <div class="section-title">LevelUp Snapshot</div>
+          <p class="subtle">The stronger the profile, the stronger the review potential.</p>
+          <div class="stat-grid">
+            <div class="mini">
+              <div class="mini-label">LevelUp Score</div>
+              <div class="mini-value" id="homeScore">42</div>
+            </div>
+            <div class="mini">
+              <div class="mini-label">Current Level</div>
+              <div class="mini-value" id="homeLevel" style="font-size:20px;">Builder</div>
+            </div>
+            <div class="mini">
+              <div class="mini-label">Current Limit</div>
+              <div class="mini-value" id="homeLimit">$1,200</div>
+            </div>
+          </div>
+
+          <div class="level-path">
+            <div class="path-item"><span>Starter</span><span>Up to $300</span></div>
+            <div class="path-item"><span>Builder</span><span>Up to $1,200</span></div>
+            <div class="path-item"><span>Prime</span><span>Up to $3,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature">
+          <h3>More than a form</h3>
+          <p class="subtle">Borrowers don’t just click through. They answer, reflect, and build a profile with intention.</p>
+        </div>
+        <div class="feature">
+          <h3>LevelUp Training</h3>
+          <p class="subtle">Short lessons, recall, and definitions improve engagement and make the borrower think before submitting.</p>
+        </div>
+        <div class="feature">
+          <h3>Manual review</h3>
+          <p class="subtle">The system supports manual decisions, request-more-info workflows, and direct borrower contact.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-how">
+      <div class="card">
+        <div class="section-title">How it works</div>
+        <p class="subtle">The website version keeps the same structure you wanted from the app, but packaged as a stronger browser experience.</p>
+
+        <div class="grid-3" style="margin-top:16px;">
+          <div class="feature">
+            <h3>1. Apply</h3>
+            <p class="subtle">Borrower enters core info and explains why they need the loan.</p>
+          </div>
+          <div class="feature">
+            <h3>2. Train</h3>
+            <p class="subtle">Borrower completes short tests, recall prompts, and definitions.</p>
+          </div>
+          <div class="feature">
+            <h3>3. Agree</h3>
+            <p class="subtle">Borrower reviews the agreement center and confirms understanding.</p>
+          </div>
+          <div class="feature">
+            <h3>4. Review</h3>
+            <p class="subtle">The final step reinforces seriousness and sends the borrower into your intake handoff.</p>
+          </div>
+          <div class="feature">
+            <h3>5. Admin</h3>
+            <p class="subtle">Applications can be reviewed manually, escalated, or sent for more info.</p>
+          </div>
+          <div class="feature">
+            <h3>6. Repay</h3>
+            <p class="subtle">Approved borrowers can be shown a repayment page and then handled manually through secure payment links.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-apply">
+      <div class="form-wrap">
+        <div class="card soft-green">
+          <div class="progress-wrap">
+            <div class="progress-head">
+              <div>
+                <strong>Borrower Intake</strong>
+                <div class="tiny">Step 1 of 4</div>
+              </div>
+              <div class="pill">Website version</div>
+            </div>
+            <div class="progress"><div style="width:25%"></div></div>
+          </div>
+
+          <div class="section-title">Apply</div>
+          <p class="subtle">Start strong. The better your answers, the stronger your LevelUp profile becomes.</p>
+
+          <div class="stack" style="margin-top:16px;">
+            <div class="row-2">
+              <div>
+                <label class="field-label">Full name</label>
+                <input type="text" id="name" placeholder="Full name" />
+              </div>
+              <div>
+                <label class="field-label">Email</label>
+                <input type="email" id="email" placeholder="Email" />
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div>
+                <label class="field-label">Phone</label>
+                <input type="text" id="phone" placeholder="Phone" />
+              </div>
+              <div>
+                <label class="field-label">Monthly income</label>
+                <input type="number" id="income" placeholder="Monthly income" />
+              </div>
+            </div>
+
+            <div>
+              <label class="field-label">Loan purpose</label>
+              <select id="purpose">
+                <option>Emergency expense</option>
+                <option>Car repair</option>
+                <option>Medical</option>
+                <option>Bill smoothing</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="field-label">Why do you need this loan?</label>
+              <textarea id="reason" placeholder="Explain your situation clearly"></textarea>
+            </div>
+
+            <div class="button-row">
+              <button class="btn" onclick="saveApply()">Save application step</button>
+              <button class="btn-outline" onclick="jumpTo('training')">Go to LevelUp Training</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-training">
+      <div class="form-wrap">
+        <div class="card soft-amber">
+          <div class="progress-wrap">
+            <div class="progress-head">
+              <div>
+                <strong>LevelUp Training</strong>
+                <div class="tiny">Step 2 of 4</div>
+              </div>
+              <div class="pill" id="trainingStatus">Question active</div>
+            </div>
+            <div class="progress"><div style="width:50%"></div></div>
+          </div>
+
+          <div class="section-title">Think before you borrow</div>
+          <p class="subtle">This section is supposed to slow people down and make them think. The more thoughtful the user is, the stronger the profile becomes.</p>
+
+          <div class="warning" style="margin-top:14px;">
+            You cannot keep farming the same question forever. Once a question is completed, it locks. Move to the next lesson to continue leveling up.
+          </div>
+
+          <div class="score-panel">
+            <div class="score-ring">
+              <span id="scoreNumber" class="score-mid">42</span>
+            </div>
+            <div>
+              <div class="section-title" style="font-size:24px; margin-bottom:6px;">LevelUp Score</div>
+              <div class="subtle" id="scoreText">Building profile strength through effort, clarity, and discipline.</div>
+              <div class="button-row" style="margin-top:10px;">
+                <div class="pill" id="scoreLevelPill">Builder</div>
+                <div class="pill" id="scoreLimitPill">Limit: $1,200</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" style="margin-top:16px;">
+            <h3 id="lessonTitle">LevelUp Training: Borrow Smart</h3>
+            <p class="subtle" id="lessonFact">Smaller balances are easier to repay cleanly and usually reduce total interest cost.</p>
+            <h3 style="margin-top:16px;" id="lessonQuestion">Which choice leads to a better LevelUp Score?</h3>
+            <div class="stack" id="lessonOptions" style="margin-top:12px;"></div>
+            <p class="tiny" id="trainingHint" style="margin-top:10px;">Correct answers improve the LevelUp Score.</p>
+            <div class="button-row">
+              <button class="btn" id="completeTrainingBtn" onclick="completeTraining()">Complete Training (+12)</button>
+              <button class="btn-outline" onclick="nextLesson()">Next lesson</button>
+            </div>
+          </div>
+
+          <div class="row-2" style="margin-top:16px;">
+            <div class="question-card">
+              <h3>Recall</h3>
+              <p class="subtle" id="lessonRecall">What was the main LevelUp lesson?</p>
+              <textarea id="recallAnswer" placeholder="Write what you learned"></textarea>
+              <button class="btn" style="margin-top:12px;" onclick="completeRecall()">Submit Recall (+10)</button>
+            </div>
+
+            <div class="question-card">
+              <h3>Definition</h3>
+              <textarea id="definitionAnswer" placeholder="Define APR"></textarea>
+              <textarea id="meaningAnswer" style="margin-top:10px;" placeholder="What does that mean to you?"></textarea>
+              <button class="btn-outline" style="margin-top:12px;" onclick="saveDefinition()">Save Definition Response (+8)</button>
+            </div>
+          </div>
+
+          <div class="button-row" style="margin-top:16px;">
+            <button class="btn" onclick="jumpTo('agreement')">Continue to agreement</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-agreement">
+      <div class="form-wrap">
+        <div class="card soft-rose">
+          <div class="progress-wrap">
+            <div class="progress-head">
+              <div>
+                <strong>Agreement Center</strong>
+                <div class="tiny">Step 3 of 4</div>
+              </div>
+              <div class="pill">Serious financial step</div>
+            </div>
+            <div class="progress"><div style="width:75%"></div></div>
+          </div>
+
+          <div class="section-title">Agreement Center</div>
+          <p class="subtle">This should feel like a real financial commitment, not just another form screen.</p>
+
+          <div class="tabs">
+            <button class="tab-btn active" onclick="showAgreementTab('agreement', this)">Agreement</button>
+            <button class="tab-btn" onclick="showAgreementTab('privacy', this)">Privacy</button>
+            <button class="tab-btn" onclick="showAgreementTab('consent', this)">Consent</button>
+            <button class="tab-btn" onclick="showAgreementTab('signature', this)">Signature</button>
+          </div>
+
+          <div class="agreement-box">
+            <div class="agreement-pane active" id="agreement-agreement
